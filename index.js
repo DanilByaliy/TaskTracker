@@ -9,7 +9,7 @@ try {
 }
 
 function addTask(title, description, deadline) {
-  const regexp = /^\d{4}-\d{2}-\d{2}$/;
+  const regexp = /^\d{4}-\d{2}-\d{2}( \d{2})?(:\d{2})?$/;
   if (!regexp.test(deadline)) {
     console.log('Wrong format');
     return;
@@ -17,7 +17,7 @@ function addTask(title, description, deadline) {
   const task = {
     title: title,
     description: description,
-    deadline: deadline,
+    deadline: deadline.replace(' ', 'T') + ':00',
     isDone: false
   }
   tasksArr.push(task);
