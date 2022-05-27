@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/DanilByaliy/TaskTracker/issues"
   },
-  "homepage": "https://github.com/DanilByaliy/TaskTracker#readme"
+  "homepage": "https://github.com/DanilByaliy/TaskTracker#readme",
+  "dependencies": {
+    "yargs": "^17.5.1"
+  }
 }
