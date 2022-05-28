@@ -2,6 +2,12 @@
 
 const taskTracker = require("./index.js");
 
+/* describe('Timezones', () => {
+  it('should always be UTC', () => {
+      expect(new Date().getTimezoneOffset()).toBe(0);
+  });
+}); */
+
 test("tasksOutput function test", () => {
   let tasksArr = [];
   expect(taskTracker.tasksOutput(tasksArr)).toBe("");

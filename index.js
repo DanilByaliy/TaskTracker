@@ -4,6 +4,7 @@ const argv = require("yargs/yargs")(process.argv.slice(2)).argv;
 
 let tasksArr;
 
+//
 try {
   tasksArr = require("./tasksfile.json");
 } catch {
@@ -69,7 +70,6 @@ const getDateString = (dateStr) => {
   if(date === "Invalid Date" || isNaN(date)) {
     throw new Error('Invalid Date')
 }
-  console.dir(date)
   let res =
     "Дедлайн: " +
     date.getDate() +
