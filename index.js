@@ -2,15 +2,24 @@
 
 const argv = require("yargs/yargs")(process.argv.slice(2)).argv;
 
-const tasksArr = require("./tasksfile.json");
+let tasksArr;
+
+try {
+  tasksArr = require("./tasksfile.json");
+} catch {
+  tasksArr = [];
+}
 
 const readArgs = (args) => {
   if (args.s) {
-    console.log("Список невиконаних завдань:");
     showTasks();
   } else if (args.showall) {
-    console.log("Список всіх завдань:");
-    tasksOutput(tasksArr);
+    if (tasksArr[0]) {
+      console.log("Список всіх завдань:");
+      console.log(tasksOutput(tasksArr));
+    } else {
+      console.log("Завдань немає");
+    }
   }
 };
 
@@ -21,34 +30,46 @@ const showTasks = () => {
       undoneTasks.push(el);
     }
   }
-  tasksOutput(undoneTasks);
+  if (undoneTasks[0]) {
+    console.log("Список невиконаних завдань:");
+    console.log(tasksOutput(undoneTasks));
+  } else {
+    console.log("Завдань немає");
+  }
 };
 
 const tasksOutput = (tasksArray) => {
   let counter = 1;
   let outputStr = "";
   for (let el of tasksArray) {
-    outputStr += `\nЗавдання №${counter}
+    if (el.taskName) {
+      outputStr += `\nЗавдання №${counter}
 Назва: ${el.taskName}
 `;
-    if (el.taskDetails) {
-      outputStr += `Опис: ${el.taskDetails}\n`;
+      if (el.taskDetails) {
+        outputStr += `Опис: ${el.taskDetails}\n`;
+      }
+      if (el.taskDeadline) {
+        outputStr += getDateString(el.taskDeadline);
+      }
+      if (el.taskDone) {
+        outputStr += `Стан завдання: ✓\n`;
+      } else {
+        outputStr += `Стан завдання: ✗\n`;
+      }
+      counter++;
     }
-    if (el.taskDeadline) {
-      outputStr += getDateString(el.taskDeadline);
-    }
-    if (el.taskDone) {
-      outputStr += `Стан завдання: ✓\n`;
-    } else {
-      outputStr += `Стан завдання: ✗\n`;
-    }
-    counter++;
   }
-  console.log(outputStr);
+  return outputStr;
 };
 
 const getDateString = (dateStr) => {
+  if (dateStr === "") throw new Error('Invalid Date');
   let date = new Date(dateStr);
+  if(date === "Invalid Date" || isNaN(date)) {
+    throw new Error('Invalid Date')
+}
+  console.dir(date)
   let res =
     "Дедлайн: " +
     date.getDate() +
@@ -60,7 +81,7 @@ const getDateString = (dateStr) => {
   if (
     Date.parse(date)
       .toString()
-      .match(/[0-9]*000000/)
+      .match(/[0-9]*00000/)
   ) {
     res += "\n";
   } else {
@@ -70,3 +91,8 @@ const getDateString = (dateStr) => {
 };
 
 readArgs(argv);
+
+module.exports = {
+  tasksOutput,
+  getDateString,
+};
