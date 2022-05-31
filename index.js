@@ -44,14 +44,14 @@ function addTask(title, description, deadline) {
   updateBase(tasksArr);
 }
 
-function editTask(id, title, description, deadline){
-  const regexp = /^\d{4}-\d{2}-\d{2}( \d{2})?(:\d{2})?$/;
-  
+function editTask(id, title, description, deadline){  
+  if (deadline) {
+    if (!checkAndChangeFormat(deadline)) return;
+    tasksArr[id].deadline = deadline.replace(' ', 'T') + ':00';
+  }
+
   title ? tasksArr[id].title = title : null;
   description ? tasksArr[id].description = description : null;
-
-  if (!checkAndChangeFormat(deadline)) return;
-  tasksArr[id].deadline = deadline.replace(' ', 'T') + ':00';
 
   updateBase(tasksArr);
 }
