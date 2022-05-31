@@ -21,12 +21,19 @@ function updateBase(data) {
   fs.writeFileSync('tasksfile.json', `${JSON.stringify(data)}`);
 }
 
-function addTask(title, description, deadline) {
+function checkFormat(deadline) {
   const regexp = /^\d{4}-\d{2}-\d{2}( \d{2})?(:\d{2})?$/;
+
   if (!regexp.test(deadline)) {
     console.log('Wrong format');
-    return;
+    return false;
   }
+  return true;
+}
+
+function addTask(title, description, deadline) {
+  if (!checkFormat(deadline)) return;
+
   const task = {
     title: title,
     description: description,
@@ -42,13 +49,9 @@ function editTask(id, title, description, deadline){
   
   title ? tasksArr[id].title = title : null;
   description ? tasksArr[id].description = description : null;
-  if (deadline) {
-    if (!regexp.test(deadline)) {
-    console.log('Wrong format');
-    return;
-    }
-    tasksArr[id].deadline = deadline.replace(' ', 'T') + ':00';
-  }
+
+  if (!checkAndChangeFormat(deadline)) return;
+  tasksArr[id].deadline = deadline.replace(' ', 'T') + ':00';
 
   updateBase(tasksArr);
 }
