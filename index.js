@@ -1,11 +1,24 @@
 const fs = require('fs');
 
-let tasksArr;
+let tasksArr = getTasks();
 
-try {
-  tasksArr = require('./tasksfile.json');
-} catch {
-  tasksArr = [];
+function getTask(id) {
+  return tasksArr[id];
+}
+
+function getTasks() {
+  let tasks;
+  try {
+    tasks = require('./tasksfile.json');
+  } catch {
+    tasks = [];
+  }
+  return tasks;
+}
+
+function updateBase(data) {
+  data ? null : tasksArr = [];
+  fs.writeFileSync('tasksfile.json', `${JSON.stringify(data)}`);
 }
 
 function addTask(title, description, deadline) {
@@ -21,7 +34,7 @@ function addTask(title, description, deadline) {
     isDone: false
   }
   tasksArr.push(task);
-  fs.writeFileSync('tasksfile.json', `${JSON.stringify(tasksArr)}`);
+  updateBase(tasksArr);
 }
 
 function editTask(id, title, description, deadline){
@@ -37,5 +50,7 @@ function editTask(id, title, description, deadline){
     tasksArr[id].deadline = deadline.replace(' ', 'T') + ':00';
   }
 
-  fs.writeFileSync('tasksfile.json', `${JSON.stringify(tasksArr)}`);
+  updateBase(tasksArr);
 }
+
+module.exports = { addTask, editTask, getTask, getTasks, updateBase }
