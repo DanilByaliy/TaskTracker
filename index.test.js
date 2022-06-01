@@ -51,43 +51,48 @@ describe('EditTask function', () => {
 
   test('should only change the title', () => {
     editTask(0, 'newTitle');
+    const editTask = getTask(0);
 
-    expect(getTask(0).title).toBe('newTitle');
-    expect(getTask(0).description).toBe('description1');
-    expect(getTask(0).deadline).toBe('2022-06-30T23:59:00');
+    expect(editTask.title).toBe('newTitle');
+    expect(editTask.description).toBe('description1');
+    expect(editTask.deadline).toBe('2022-06-30T23:59:00');
   })
 
   test('should change only the description', () => {
     editTask(0, null, 'newDescription');
+    const editTask = getTask(0);
   
-    expect(getTask(0).title).toBe('title1');
-    expect(getTask(0).description).toBe('newDescription');
-    expect(getTask(0).deadline).toBe('2022-06-30T23:59:00');
+    expect(editTask.title).toBe('title1');
+    expect(editTask.description).toBe('newDescription');
+    expect(editTask.deadline).toBe('2022-06-30T23:59:00');
   })
 
   test('should only change the deadline', () => {
     editTask(0, null, null, '2022-02-22 22:22');
+    const editTask = getTask(0);
   
-    expect(getTask(0).title).toBe('title1');
-    expect(getTask(0).description).toBe('description1');
-    expect(getTask(0).deadline).toBe('2022-02-22T22:22:00');
+    expect(editTask.title).toBe('title1');
+    expect(editTask.description).toBe('description1');
+    expect(editTask.deadline).toBe('2022-02-22T22:22:00');
   })
 
   test('must change the title, description and deadline', () => {
     editTask(0, 'newTitle', 'newDescription', '2022-02-22 22:22');
+    const editTask = getTask(0);
   
-    expect(getTask(0).title).toBe('newTitle');
-    expect(getTask(0).description).toBe('newDescription');
-    expect(getTask(0).deadline).toBe('2022-02-22T22:22:00');
+    expect(editTask.title).toBe('newTitle');
+    expect(editTask.description).toBe('newDescription');
+    expect(editTask.deadline).toBe('2022-02-22T22:22:00');
   })  
 
   test('must change all task parameters for id', () => {
     addTask('title2', 'description2', '2022-06-29 23:59');
     editTask(1, 'newTitle', 'newDescription', '2022-02-22 22:22');
+    const editTask = getTask(1);
   
-    expect(getTask(1).title).toBe('newTitle');
-    expect(getTask(1).description).toBe('newDescription');
-    expect(getTask(1).deadline).toBe('2022-02-22T22:22:00');
+    expect(editTask.title).toBe('newTitle');
+    expect(editTask.description).toBe('newDescription');
+    expect(editTask.deadline).toBe('2022-02-22T22:22:00');
   })  
 
   test('should not change anything', () => {
