@@ -25,8 +25,8 @@ function checkFormat(deadline) {
   const regexp = /^\d{4}-\d{2}-\d{2}( \d{2})?(:\d{2})?$/;
 
   if (!regexp.test(deadline)) {
-    console.log('Wrong format');
-    return false;
+    throw new Error('Wrong format');
+    // return false;
   }
   return true;
 }
@@ -46,7 +46,7 @@ function addTask(title, description, deadline) {
 
 function editTask(id, title, description, deadline){  
   if (deadline) {
-    if (!checkAndChangeFormat(deadline)) return;
+    if (!checkFormat(deadline)) return;
     tasksArr[id].deadline = deadline.replace(' ', 'T') + ':00';
   }
 
