@@ -5,8 +5,9 @@ let tasksArr = getTasks();
 
 const argv = require("yargs/yargs")(process.argv.slice(2)).argv;
 
-function getTask(id) {
-  return tasksArr[id];
+function getTask(index) {
+  if (!tasksArr[index]) throw new Error('There is no such task');
+  return tasksArr[index];
 }
 
 function getTasks() {
