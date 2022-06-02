@@ -218,7 +218,7 @@ describe('EditTask function', () => {
     expect(editTask1.deadline).toBe('2022-02-22T22:22:00');
   })  
 
-  test('must change all task parameters for id', () => {
+  test('must change all task parameters for index', () => {
     taskTracker.addTask('title2', 'description2', '2022-06-29 23:59');
     taskTracker.editTask(1, 'newTitle', 'newDescription', '2022-02-22 22:22');
     const editTask2 = taskTracker.getTask(1);

@@ -127,14 +127,14 @@ function addTask(title, description, deadline) {
   updateBase(tasksArr);
 }
 
-function editTask(id, title, description, deadline){  
+function editTask(index, title, description, deadline){  
   if (deadline) {
     if (!checkFormat(deadline)) return;
-    tasksArr[id].deadline = deadline.replace(' ', 'T') + ':00';
+    tasksArr[index].deadline = deadline.replace(' ', 'T') + ':00';
   }
 
-  title ? tasksArr[id].title = title : null;
-  description ? tasksArr[id].description = description : null;
+  title ? tasksArr[index].title = title : null;
+  description ? tasksArr[index].description = description : null;
 
   updateBase(tasksArr);
 }
