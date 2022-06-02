@@ -1,14 +1,38 @@
 "use strict";
 
+const fs = require('fs');
+let tasksArr = getTasks();
+
 const argv = require("yargs/yargs")(process.argv.slice(2)).argv;
 
-let tasksArr;
+function getTask(index) {
+  if (!tasksArr[index]) throw new Error('There is no such task');
+  return tasksArr[index];
+}
 
-//
-try {
-  tasksArr = require("./tasksfile.json");
-} catch {
-  tasksArr = [];
+function getTasks() {
+  let tasks;
+  try {
+    tasks = require('./tasksfile.json');
+  } catch {
+    tasks = [];
+  }
+  return tasks;
+}
+
+function updateBase(data) {
+  data ? null : tasksArr = [];
+  fs.writeFileSync('tasksfile.json', `${JSON.stringify(data)}`);
+}
+
+function checkFormat(deadline) {
+  const regexp = /^\d{4}-\d{2}-\d{2}( \d{2})?(:\d{2})?$/;
+
+  if (!regexp.test(deadline)) {
+    throw new Error('Wrong format');
+    // return false;
+  }
+  return true;
 }
 
 const readArgs = (args) => {
@@ -27,7 +51,7 @@ const readArgs = (args) => {
 const showTasks = () => {
   let undoneTasks = [];
   for (let el of tasksArr) {
-    if (el.taskDone === false) {
+    if (el.isDone === false) {
       undoneTasks.push(el);
     }
   }
@@ -43,17 +67,17 @@ const tasksOutput = (tasksArray) => {
   let counter = 1;
   let outputStr = "";
   for (let el of tasksArray) {
-    if (el.taskName) {
+    if (el.title) {
       outputStr += `\nЗавдання №${counter}
-Назва: ${el.taskName}
+Назва: ${el.title}
 `;
-      if (el.taskDetails) {
-        outputStr += `Опис: ${el.taskDetails}\n`;
+      if (el.description) {
+        outputStr += `Опис: ${el.description}\n`;
       }
-      if (el.taskDeadline) {
-        outputStr += getDateString(el.taskDeadline);
+      if (el.deadline) {
+        outputStr += getDateString(el.deadline);
       }
-      if (el.taskDone) {
+      if (el.isDone) {
         outputStr += `Стан завдання: ✓\n`;
       } else {
         outputStr += `Стан завдання: ✗\n`;
@@ -90,9 +114,39 @@ const getDateString = (dateStr) => {
   return res;
 };
 
+function addTask(title, description, deadline) {
+  if (!checkFormat(deadline)) return;
+
+  const task = {
+    title: title,
+    description: description,
+    deadline: deadline.replace(' ', 'T') + ':00',
+    isDone: false
+  }
+  tasksArr.push(task);
+  updateBase(tasksArr);
+}
+
+function editTask(index, title, description, deadline){  
+  if (deadline) {
+    if (!checkFormat(deadline)) return;
+    tasksArr[index].deadline = deadline.replace(' ', 'T') + ':00';
+  }
+
+  title ? tasksArr[index].title = title : null;
+  description ? tasksArr[index].description = description : null;
+
+  updateBase(tasksArr);
+}
+
 readArgs(argv);
 
 module.exports = {
   tasksOutput,
   getDateString,
+  addTask, 
+  editTask, 
+  getTask, 
+  getTasks, 
+  updateBase
 };
