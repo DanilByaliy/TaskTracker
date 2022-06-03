@@ -20,14 +20,16 @@ const task1 = {
   title: 'title1',
   description: 'description1',
   deadline: '2022-06-30T23:59:00',
-  isDone: false
+  isDone: false,
+  executionDate: null
 }
 
 const task2 = {
   title: 'title2',
   description: 'description2',
   deadline: '2022-06-29T23:59:00',
-  isDone: false
+  isDone: false,
+  executionDate: null
 }
 
 test("tasksOutput function test", () => {
