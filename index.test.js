@@ -250,3 +250,29 @@ describe('EditTask function', () => {
     expect(taskTracker.getTask(0)).toEqual(task1);
   })  
 })
+
+describe('MarkAsDone function', () => {
+  beforeEach(() => {
+    taskTracker.addTask('title1', 'description1', '2022-06-30 23:59');
+    taskTracker.addTask('title2', 'description2', '2022-06-29 23:59');
+  })
+
+  test('should return the error and change nothing', () => {
+    expect(() => taskTracker.markAsDone(3))
+    .toThrow('There is no such task');
+
+    expect(taskTracker.getTask(0)).toEqual(task1);
+  })  
+
+  test('must change the isDone and executionDate fields', () => {
+    taskTracker.markAsDone(0);
+    taskTracker.markAsDone(1);
+    const completedTask1 = taskTracker.getTask(0);
+    const completedTask2 = taskTracker.getTask(1);
+
+    expect(completedTask1.isDone).toBe(true);
+    expect(completedTask2.isDone).toBe(true);
+    expect(completedTask1.executionDate).not.toBe(null);
+    expect(completedTask2.executionDate).not.toBe(null);
+  })
+})

@@ -163,5 +163,7 @@ module.exports = {
   editTask, 
   getTask, 
   getTasks, 
-  updateBase
+  updateBase,
+  markAsDone,
+  deleteTask
 };
