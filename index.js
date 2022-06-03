@@ -121,13 +121,15 @@ function addTask(title, description, deadline) {
     title: title,
     description: description,
     deadline: deadline.replace(' ', 'T') + ':00',
-    isDone: false
+    isDone: false,
+    executionDate: null
   }
   tasksArr.push(task);
   updateBase(tasksArr);
 }
 
 function editTask(index, title, description, deadline){  
+  if (!tasksArr[index]) throw new Error('There is no such task');
   if (deadline) {
     if (!checkFormat(deadline)) return;
     tasksArr[index].deadline = deadline.replace(' ', 'T') + ':00';
