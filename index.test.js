@@ -276,3 +276,33 @@ describe('MarkAsDone function', () => {
     expect(completedTask2.executionDate).not.toBe(null);
   })
 })
+
+describe('DeleteTask function', () => {
+  beforeEach(() => {
+    taskTracker.addTask('title1', 'description1', '2022-06-30 23:59');
+    taskTracker.addTask('title2', 'description2', '2022-06-29 23:59');
+  })
+
+  test('should return the error and change nothing', () => {
+    expect(() => taskTracker.deleteTask(2))
+    .toThrow('There is no such task');
+
+    expect(taskTracker.getTask(0)).toEqual(task1);
+    expect(taskTracker.getTask(1)).toEqual(task2);
+  })
+
+  test('should delete the task', () => {
+    taskTracker.deleteTask(1);
+
+    expect(() => taskTracker.getTask(1))
+    .toThrow('There is no such task');
+  })
+
+  test('should delete tasks and move the following', () => {
+    taskTracker.deleteTask(0);
+
+    expect(taskTracker.getTask(0)).toEqual(task2);
+    expect(() => taskTracker.getTask(1))
+    .toThrow('There is no such task');
+  })
+})
