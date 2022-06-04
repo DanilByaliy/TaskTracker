@@ -29,7 +29,7 @@ function checkFormat(deadline) {
   const regexp = /^\d{4}-\d{2}-\d{2}( \d{2})?(:\d{2})?$/;
 
   if (!regexp.test(deadline)) {
-    throw new Error("Wrong format");
+    throw new Error("Wrong data format");
     // return false;
   }
   return true;
@@ -47,11 +47,12 @@ const readArgs = (args) => {
       console.log("Завдань немає");
     }
   } else if (args.a) {
-    if (typeof args.title === "string" && args.title.length > 1) {
+    addTask(args.title, args.desc, args.deadline)
+/*     if (typeof args.title === "string" && args.title.length > 1) {
       console.dir([args.title, args.desc, args.deadline]);
-      addTask(args.title, args.desc, args.deadline)
+      
 
-    }
+    } */
   }
 };
 
@@ -103,7 +104,6 @@ const getDateString = (dateStr) => {
     throw new Error("Invalid Date");
   }
   let res =
-    //  "Дедлайн: " +
     date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
   // check if date has hours
   if (
@@ -119,7 +119,10 @@ const getDateString = (dateStr) => {
 };
 
 function addTask(title, description, deadline) {
-  if (!description) description = null;
+  if(typeof title !== "string" || title.length < 1){
+    throw new Error ("Wrong title")
+  }
+  if (!description || typeof description !== "string") description = null;
   const task = {
     title: title,
     description: description,

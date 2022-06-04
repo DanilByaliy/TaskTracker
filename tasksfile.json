@@ -19,12 +19,5 @@
     "deadline": "2022-05-26T18:25:43+03:00",
     "isDone": false,
     "executionDate": null
-  },
-  {
-    "title": "Title one",
-    "description": null,
-    "deadline": null,
-    "isDone": false,
-    "executionDate": null
   }
 ]
