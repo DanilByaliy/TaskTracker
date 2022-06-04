@@ -171,15 +171,15 @@ describe('AddTask function', () => {
   test('must add a new task to the database', () => {
     taskTracker.addTask('title1', 'description1', '2022-06-30 23:59');
 
-    expect(taskTracker.getTask(0)).toEqual(task1);
+    expect(taskTracker.getTask(1)).toEqual(task1);
   })
 
   test('must add a new task to the database at the end', () => {
     taskTracker.addTask('title1', 'description1', '2022-06-30 23:59');
     taskTracker.addTask('title2', 'description2', '2022-06-29 23:59');
   
-    expect(taskTracker.getTask(0)).toEqual(task1);
-    expect(taskTracker.getTask(1)).toEqual(task2);
+    expect(taskTracker.getTask(1)).toEqual(task1);
+    expect(taskTracker.getTask(2)).toEqual(task2);
   })
 })
 
@@ -189,8 +189,8 @@ describe('EditTask function', () => {
   })
 
   test('should only change the title', () => {
-    taskTracker.editTask(0, 'newTitle');
-    const editTask1 = taskTracker.getTask(0);
+    taskTracker.editTask(1, 'newTitle');
+    const editTask1 = taskTracker.getTask(1);
 
     expect(editTask1.title).toBe('newTitle');
     expect(editTask1.description).toBe('description1');
@@ -198,8 +198,8 @@ describe('EditTask function', () => {
   })
 
   test('should change only the description', () => {
-    taskTracker.editTask(0, null, 'newDescription');
-    const editTask1 = taskTracker.getTask(0);
+    taskTracker.editTask(1, null, 'newDescription');
+    const editTask1 = taskTracker.getTask(1);
   
     expect(editTask1.title).toBe('title1');
     expect(editTask1.description).toBe('newDescription');
@@ -207,8 +207,8 @@ describe('EditTask function', () => {
   })
 
   test('should only change the deadline', () => {
-    taskTracker.editTask(0, null, null, '2022-02-22 22:22');
-    const editTask1 = taskTracker.getTask(0);
+    taskTracker.editTask(1, null, null, '2022-02-22 22:22');
+    const editTask1 = taskTracker.getTask(1);
   
     expect(editTask1.title).toBe('title1');
     expect(editTask1.description).toBe('description1');
@@ -216,8 +216,8 @@ describe('EditTask function', () => {
   })
 
   test('must change the title, description and deadline', () => {
-    taskTracker.editTask(0, 'newTitle', 'newDescription', '2022-02-22 22:22');
-    const editTask1 = taskTracker.getTask(0);
+    taskTracker.editTask(1, 'newTitle', 'newDescription', '2022-02-22 22:22');
+    const editTask1 = taskTracker.getTask(1);
   
     expect(editTask1.title).toBe('newTitle');
     expect(editTask1.description).toBe('newDescription');
@@ -226,8 +226,8 @@ describe('EditTask function', () => {
 
   test('must change all task parameters for index', () => {
     taskTracker.addTask('title2', 'description2', '2022-06-29 23:59');
-    taskTracker.editTask(1, 'newTitle', 'newDescription', '2022-02-22 22:22');
-    const editTask2 = taskTracker.getTask(1);
+    taskTracker.editTask(2, 'newTitle', 'newDescription', '2022-02-22 22:22');
+    const editTask2 = taskTracker.getTask(2);
   
     expect(editTask2.title).toBe('newTitle');
     expect(editTask2.description).toBe('newDescription');
@@ -235,22 +235,22 @@ describe('EditTask function', () => {
   })  
 
   test('should not change anything', () => {
-    taskTracker.editTask(0);
+    taskTracker.editTask(1);
 
-    expect(taskTracker.getTask(0)).toEqual(task1);
+    expect(taskTracker.getTask(1)).toEqual(task1);
   })
 
   test('should return the error and change nothing', () => {
-    expect(() => taskTracker.editTask(0, null, null, 'wrong format'))
-    .toThrow('Wrong format');
+    expect(() => taskTracker.editTask(1, null, null, 'wrong format'))
+    .toThrow('Wrong date format');
 
-    expect(taskTracker.getTask(0)).toEqual(task1);
+    expect(taskTracker.getTask(1)).toEqual(task1);
   })  
 
   test('should return the error and change nothing', () => {
-    expect(() => taskTracker.editTask(0, 'newTitle', 'newDescription', 'wrong format'))
-    .toThrow('Wrong format');
+    expect(() => taskTracker.editTask(1, 'newTitle', 'newDescription', 'wrong format'))
+    .toThrow('Wrong date format');
   
-    expect(taskTracker.getTask(0)).toEqual(task1);
+    expect(taskTracker.getTask(1)).toEqual(task1);
   })  
 })

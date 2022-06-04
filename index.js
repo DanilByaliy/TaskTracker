@@ -6,6 +6,7 @@ let tasksArr = getTasks();
 const argv = require("yargs/yargs")(process.argv.slice(2)).argv;
 
 function getTask(index) {
+  index -= 1;
   if (!tasksArr[index]) throw new Error("There is no such task");
   return tasksArr[index];
 }
@@ -29,14 +30,13 @@ function checkFormat(deadline) {
   const regexp = /^\d{4}-\d{2}-\d{2}( \d{2})?(:\d{2})?$/;
 
   if (!regexp.test(deadline)) {
-    throw new Error("Wrong data format");
+    throw new Error("Wrong date format");
     // return false;
   }
   return true;
 }
 
 const readArgs = (args) => {
-  // console.dir(args)
   if (args.s) {
     showTasks();
   } else if (args.showall) {
@@ -48,11 +48,10 @@ const readArgs = (args) => {
     }
   } else if (args.a) {
     addTask(args.title, args.desc, args.deadline)
-/*     if (typeof args.title === "string" && args.title.length > 1) {
-      console.dir([args.title, args.desc, args.deadline]);
-      
-
-    } */
+    console.log('Завдання додано успішно')
+  } else if (args.e) {
+    editTask(args.index, args.title, args.desc, args.deadline)
+    console.log('Завдання змінено успішно')
   }
 };
 
@@ -109,7 +108,7 @@ const getDateString = (dateStr) => {
   if (
     Date.parse(date)
       .toString()
-      .match(/[0-9]*00000/)
+      .match(/[0-9]*0000000/)
   ) {
     res += "\n";
   } else {
@@ -140,14 +139,18 @@ function addTask(title, description, deadline) {
 }
 
 function editTask(index, title, description, deadline) {
+  index -= 1;
   if (!tasksArr[index]) throw new Error("There is no such task");
   if (deadline) {
     if (!checkFormat(deadline)) return;
     tasksArr[index].deadline = deadline.replace(" ", "T") + ":00";
   }
-
-  title ? (tasksArr[index].title = title) : null;
-  description ? (tasksArr[index].description = description) : null;
+  if(typeof title === "string" && title.length > 1){
+    tasksArr[index].title = title
+  }
+  if(typeof description === "string" && description.length > 1){
+    tasksArr[index].description = description
+  }
 
   updateBase(tasksArr);
 }
