@@ -1,19 +1,19 @@
 "use strict";
 
-const fs = require('fs');
+const fs = require("fs");
 let tasksArr = getTasks();
 
 const argv = require("yargs/yargs")(process.argv.slice(2)).argv;
 
 function getTask(index) {
-  if (!tasksArr[index]) throw new Error('There is no such task');
+  if (!tasksArr[index]) throw new Error("There is no such task");
   return tasksArr[index];
 }
 
 function getTasks() {
   let tasks;
   try {
-    tasks = require('./tasksfile.json');
+    tasks = require("./tasksfile.json");
   } catch {
     tasks = [];
   }
@@ -21,21 +21,22 @@ function getTasks() {
 }
 
 function updateBase(data) {
-  data ? null : tasksArr = [];
-  fs.writeFileSync('tasksfile.json', `${JSON.stringify(data)}`);
+  data ? null : (tasksArr = []);
+  fs.writeFileSync("tasksfile.json", `${JSON.stringify(data)}`);
 }
 
 function checkFormat(deadline) {
   const regexp = /^\d{4}-\d{2}-\d{2}( \d{2})?(:\d{2})?$/;
 
   if (!regexp.test(deadline)) {
-    throw new Error('Wrong format');
+    throw new Error("Wrong format");
     // return false;
   }
   return true;
 }
 
 const readArgs = (args) => {
+  // console.dir(args)
   if (args.s) {
     showTasks();
   } else if (args.showall) {
@@ -44,6 +45,12 @@ const readArgs = (args) => {
       console.log(tasksOutput(tasksArr));
     } else {
       console.log("Завдань немає");
+    }
+  } else if (args.a) {
+    if (typeof args.title === "string" && args.title.length > 1) {
+      console.dir([args.title, args.desc, args.deadline]);
+      addTask(args.title, args.desc, args.deadline)
+
     }
   }
 };
@@ -90,18 +97,14 @@ const tasksOutput = (tasksArray) => {
 };
 
 const getDateString = (dateStr) => {
-  if (dateStr === "") throw new Error('Invalid Date');
+  if (dateStr === "") throw new Error("Invalid Date");
   let date = new Date(dateStr);
-  if(date === "Invalid Date" || isNaN(date)) {
-    throw new Error('Invalid Date')
-}
+  if (date === "Invalid Date" || isNaN(date)) {
+    throw new Error("Invalid Date");
+  }
   let res =
-  //  "Дедлайн: " +
-    date.getDate() +
-    "/" +
-    (date.getMonth() + 1) +
-    "/" +
-    date.getFullYear();
+    //  "Дедлайн: " +
+    date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
   // check if date has hours
   if (
     Date.parse(date)
@@ -116,28 +119,32 @@ const getDateString = (dateStr) => {
 };
 
 function addTask(title, description, deadline) {
-  if (!checkFormat(deadline)) return;
-
+  if (!description) description = null;
   const task = {
     title: title,
     description: description,
-    deadline: deadline.replace(' ', 'T') + ':00',
+    deadline: null,
     isDone: false,
-    executionDate: null
-  }
+    executionDate: null,
+  };
+  if (!deadline || !checkFormat(deadline)) {
+    deadline = null;
+  } else {
+    task.deadline = deadline.replace(" ", "T") + ":00"
+  } ;
   tasksArr.push(task);
   updateBase(tasksArr);
 }
 
-function editTask(index, title, description, deadline){  
-  if (!tasksArr[index]) throw new Error('There is no such task');
+function editTask(index, title, description, deadline) {
+  if (!tasksArr[index]) throw new Error("There is no such task");
   if (deadline) {
     if (!checkFormat(deadline)) return;
-    tasksArr[index].deadline = deadline.replace(' ', 'T') + ':00';
+    tasksArr[index].deadline = deadline.replace(" ", "T") + ":00";
   }
 
-  title ? tasksArr[index].title = title : null;
-  description ? tasksArr[index].description = description : null;
+  title ? (tasksArr[index].title = title) : null;
+  description ? (tasksArr[index].description = description) : null;
 
   updateBase(tasksArr);
 }
@@ -147,9 +154,9 @@ readArgs(argv);
 module.exports = {
   tasksOutput,
   getDateString,
-  addTask, 
-  editTask, 
-  getTask, 
-  getTasks, 
-  updateBase
+  addTask,
+  editTask,
+  getTask,
+  getTasks,
+  updateBase,
 };
