@@ -75,10 +75,11 @@ const tasksOutput = (tasksArray) => {
         outputStr += `Опис: ${el.description}\n`;
       }
       if (el.deadline) {
-        outputStr += getDateString(el.deadline);
+        outputStr += `Дедлайн: ${getDateString(el.deadline)}`;
       }
       if (el.isDone) {
         outputStr += `Стан завдання: ✓\n`;
+        outputStr += `Дата виконання: ${getDateString(el.executionDate)}`;
       } else {
         outputStr += `Стан завдання: ✗\n`;
       }
@@ -95,7 +96,7 @@ const getDateString = (dateStr) => {
     throw new Error('Invalid Date')
 }
   let res =
-    "Дедлайн: " +
+  //  "Дедлайн: " +
     date.getDate() +
     "/" +
     (date.getMonth() + 1) +

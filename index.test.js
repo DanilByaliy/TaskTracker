@@ -108,18 +108,21 @@ test("tasksOutput function test", () => {
       description: "just details",
       deadline: "2022-05-28",
       isDone: false,
+      executionDate: null,
     },
     {
       title: "Task Two",
       description: "just details",
       deadline: "2022-05-28T01:25:43+03:00",
       isDone: true,
+      executionDate: "2022-05-27T05:25:43+03:00",
     },
     {
       title: "Task Three",
       description: "just details",
       deadline: "2022-05-26T18:25:43+03:00",
       isDone: false,
+      executionDate: null,
     },
   ];
   expect(taskTracker.tasksOutput(tasksArr)).toBe(
@@ -135,6 +138,7 @@ test("tasksOutput function test", () => {
       "Опис: just details\n" +
       "Дедлайн: 28/5/2022 1:25\n" +
       "Стан завдання: ✓\n" +
+      "Дата виконання: 27/5/2022 5:25\n" +
       "\n" +
       "Завдання №3\n" +
       "Назва: Task Three\n" +
@@ -148,7 +152,7 @@ test("getDateString function test", () => {
   let date = "";
   expect(() => taskTracker.getDateString(date)).toThrow(Error);
   date = "2022-05-28";
-  expect(taskTracker.getDateString(date)).toBe("Дедлайн: 28/5/2022\n");
+  expect(taskTracker.getDateString(date)).toBe("28/5/2022\n");
   date = "2022-13-28";
   expect(() => taskTracker.getDateString(date)).toThrow(Error);
   date = "20220328";
@@ -156,11 +160,11 @@ test("getDateString function test", () => {
   date = "2022-05-28T012543+0300";
   expect(() => taskTracker.getDateString(date)).toThrow(Error);
   date = "2022-05-28T01:25:43+03:00";
-  expect(taskTracker.getDateString(date)).toBe("Дедлайн: 28/5/2022 1:25\n");
+  expect(taskTracker.getDateString(date)).toBe("28/5/2022 1:25\n");
   date = "2022-05-28T01:25:43";
-  expect(taskTracker.getDateString(date)).toBe("Дедлайн: 28/5/2022 1:25\n");
+  expect(taskTracker.getDateString(date)).toBe("28/5/2022 1:25\n");
   date = "2022-05-28T01:25:43+01:00";
-  expect(taskTracker.getDateString(date)).toBe("Дедлайн: 28/5/2022 3:25\n");
+  expect(taskTracker.getDateString(date)).toBe("28/5/2022 3:25\n");
 });
 
 describe('AddTask function', () => {
