@@ -163,10 +163,10 @@ readArgs(argv);
 module.exports = {
   tasksOutput,
   getDateString,
-  addTask,
-  editTask,
-  getTask,
-  getTasks,
+  addTask, 
+  editTask, 
+  getTask, 
+  getTasks, 
   updateBase,
   markAsDone,
   deleteTask
