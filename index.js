@@ -148,7 +148,7 @@ function editTask(index, title, description, deadline) {
     if (!checkFormat(deadline)) return;
     tasksArr[index].deadline = deadline.replace(" ", "T") + ":00";
   }
-  if (typeof title === "string" && title.length > 1) {
+  if (typeof title === "string" && title.length > 0) {
     tasksArr[index].title = title;
   }
   if (typeof description === "string" && description.length > 1) {
