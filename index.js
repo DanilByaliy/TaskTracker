@@ -6,7 +6,6 @@ let tasksArr = getTasks();
 const argv = require("yargs/yargs")(process.argv.slice(2)).argv;
 
 function getTask(index) {
-  index -= 1;
   if (!tasksArr[index]) throw new Error("There is no such task");
   return tasksArr[index];
 }
@@ -47,11 +46,11 @@ const readArgs = (args) => {
       console.log("Завдань немає");
     }
   } else if (args.a) {
-    addTask(args.title, args.desc, args.deadline)
-    console.log('Завдання додано успішно')
+    addTask(args.title, args.desc, args.deadline);
+    console.log("Завдання додано успішно");
   } else if (args.e) {
-    editTask(args.index, args.title, args.desc, args.deadline)
-    console.log('Завдання змінено успішно')
+    editTask(args.index - 1, args.title, args.desc, args.deadline);
+    console.log("Завдання змінено успішно");
   }
 };
 
@@ -63,6 +62,11 @@ const showTasks = () => {
     }
   }
   if (undoneTasks[0]) {
+    undoneTasks.sort(function (a, b) {
+      if (b.deadline === null) return -1;
+      if (a.deadline === null) return 1;
+      return new Date(a.deadline) - new Date(b.deadline);
+    });
     console.log("Список невиконаних завдань:");
     console.log(tasksOutput(undoneTasks));
   } else {
@@ -108,7 +112,7 @@ const getDateString = (dateStr) => {
   if (
     Date.parse(date)
       .toString()
-      .match(/[0-9]*0000000/)
+      .match(/[0-9]*000000/)
   ) {
     res += "\n";
   } else {
@@ -118,8 +122,8 @@ const getDateString = (dateStr) => {
 };
 
 function addTask(title, description, deadline) {
-  if(typeof title !== "string" || title.length < 1){
-    throw new Error ("Wrong title")
+  if (typeof title !== "string" || title.length < 1) {
+    throw new Error("Wrong title");
   }
   if (!description || typeof description !== "string") description = null;
   const task = {
@@ -132,24 +136,23 @@ function addTask(title, description, deadline) {
   if (!deadline || !checkFormat(deadline)) {
     deadline = null;
   } else {
-    task.deadline = deadline.replace(" ", "T") + ":00"
-  } ;
+    task.deadline = deadline.replace(" ", "T") + ":00";
+  }
   tasksArr.push(task);
   updateBase(tasksArr);
 }
 
 function editTask(index, title, description, deadline) {
-  index -= 1;
   if (!tasksArr[index]) throw new Error("There is no such task");
   if (deadline) {
     if (!checkFormat(deadline)) return;
     tasksArr[index].deadline = deadline.replace(" ", "T") + ":00";
   }
-  if(typeof title === "string" && title.length > 1){
-    tasksArr[index].title = title
+  if (typeof title === "string" && title.length > 1) {
+    tasksArr[index].title = title;
   }
-  if(typeof description === "string" && description.length > 1){
-    tasksArr[index].description = description
+  if (typeof description === "string" && description.length > 1) {
+    tasksArr[index].description = description;
   }
 
   updateBase(tasksArr);
