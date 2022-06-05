@@ -141,6 +141,19 @@ function editTask(index, title, description, deadline){
   updateBase(tasksArr);
 }
 
+function markAsDone(index) {
+  if (!tasksArr[index]) throw new Error('There is no such task');
+  tasksArr[index].isDone = true;
+  tasksArr[index].executionDate = new Date();
+  updateBase(tasksArr);
+}
+
+function deleteTask(index) {
+  if (!tasksArr[index]) throw new Error('There is no such task');
+  tasksArr.splice(index, 1);
+  updateBase(tasksArr);
+}
+
 readArgs(argv);
 
 module.exports = {
@@ -150,5 +163,7 @@ module.exports = {
   editTask, 
   getTask, 
   getTasks, 
-  updateBase
+  updateBase,
+  markAsDone,
+  deleteTask
 };
