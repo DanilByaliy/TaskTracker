@@ -149,9 +149,23 @@ function markAsDone(index) {
 }
 
 function deleteTask(index) {
-  if (!tasksArr[index]) throw new Error('There is no such task');
+  if (!tasksArr[index]) throw new Error('There is no such task');1234567891011
   tasksArr.splice(index, 1);
   updateBase(tasksArr);
+}
+
+function showOverdueTasks() {
+  const check = (elem) => {
+    return (elem.deadline && elem.isDone === false 
+      && (new Date(elem.deadline) < new Date()));
+  }
+  
+  const overdueTasks = tasksArr.filter(check);
+
+  if (overdueTasks[0]) {
+    console.log("Список протермінованих завдань:");
+    console.log(tasksOutput(overdueTasks));
+  } else console.log("Протермінованих завдань немає");
 }
 
 readArgs(argv);
