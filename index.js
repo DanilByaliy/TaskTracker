@@ -45,6 +45,8 @@ const readArgs = (args) => {
     } else {
       console.log("Завдань немає");
     }
+  } else if (args.showburned) {
+    console.log(getOverdueTasks());
   }
 };
 
@@ -154,18 +156,20 @@ function deleteTask(index) {
   updateBase(tasksArr);
 }
 
-function showOverdueTasks() {
+function getOverdueTasks() {
   const check = (elem) => {
-    return (elem.deadline && elem.isDone === false 
-      && (new Date(elem.deadline) < new Date()));
+    return (elem.deadline && elem.isDone === false && 
+      (new Date(elem.deadline) < new Date()));
   }
   
   const overdueTasks = tasksArr.filter(check);
+  let outputStr;
 
   if (overdueTasks[0]) {
-    console.log("Список протермінованих завдань:");
-    console.log(tasksOutput(overdueTasks));
-  } else console.log("Протермінованих завдань немає");
+    outputStr = "Список протермінованих завдань:\n" + 
+    tasksOutput(overdueTasks);
+  } else outputStr = "Протермінованих завдань немає";
+  return outputStr;
 }
 
 readArgs(argv);
