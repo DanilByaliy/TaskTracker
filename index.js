@@ -72,7 +72,6 @@ function checkFormat(deadline) {
 }
 
 const readArgs = (args) => {
-  console.dir(args)
   if (args.s || args._[0] == 'show') {
     showTasks();
   } else if (args.showall || args._[0] == 'showall') {
@@ -204,7 +203,6 @@ function editTask(index, title, description, deadline) {
 }
 
 function markAsDone(index) {
-  console.dir(index)
   if(isNaN(index)) throw new Error('No index given')
   if (!tasksArr[index]) throw new Error('There is no such task');
   tasksArr[index].isDone = true;
