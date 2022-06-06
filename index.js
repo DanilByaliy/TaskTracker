@@ -3,7 +3,43 @@
 const fs = require("fs");
 let tasksArr = getTasks();
 
-const argv = require("yargs/yargs")(process.argv.slice(2)).argv;
+const argv = require("yargs/yargs")(process.argv.slice(2))
+.usage('Usage: node $0 <command> [options]')
+.command('show', 'Show uncompleted tasks')
+.command('showall', 'Show all tasks')
+.command('mark', 'Mark task as done')
+.command('add', 'Add task')
+.command('edit', 'Edit task')
+.command('showburned', 'Show tasks with burned deadlines')
+.command('delete', 'Delete task')
+.example('node $0 show', 'Show uncompleted tasks')
+.example('node $0 showall', 'Show all tasks')
+.example('node $0 mark --index 1', 'Mark task one as done')
+.example('node $0 add --title "Title" --desc "Description" --deadline "2022-06-06"', 'Add new task')
+.example('node $0 edit --index 2 --title "Title" --desc "Description" --deadline "2022-06-06"', 'Edit second task')
+.example('node $0 showburned', 'Show tasks with burned deadlines')
+.example('node $0 delete --index 3', 'Delete third task')
+.help('h')
+.alias('h', 'help')
+.describe('h', 'Show help')
+.alias('s', 'show')
+.describe('s', 'Show uncompleted tasks')
+.describe('showall', 'Show all tasks')
+.describe('showburned', 'Show tasks with burned deadlines')
+.alias('m', 'markdone')
+.describe('m', 'Mark task as done')
+.alias('a', 'add')
+.describe('a', 'Add task')
+.alias('e', 'edit')
+.describe('e', 'Edit task')
+.alias('d', 'delete')
+.describe('d', 'Delete task')
+.describe('index', 'Task number')
+.describe('title', 'Task title')
+.describe('desc', 'Task description')
+.describe('deadline', 'Task deadline')
+
+.argv;
 
 function getTask(index) {
   if (!tasksArr[index]) throw new Error("There is no such task");
@@ -36,23 +72,30 @@ function checkFormat(deadline) {
 }
 
 const readArgs = (args) => {
-  if (args.s) {
+  console.dir(args)
+  if (args.s || args._[0] == 'show') {
     showTasks();
-  } else if (args.showall) {
+  } else if (args.showall || args._[0] == 'showall') {
     if (tasksArr[0]) {
       console.log("Список всіх завдань:");
       console.log(tasksOutput(tasksArr));
     } else {
       console.log("Завдань немає");
     }
-  } else if (args.a) {
+  } else if (args.m || args._[0] == 'mark') {
+    markAsDone(args.index - 1)
+    console.log(`Завдання №${args.index} позначено виконаним`)
+  } else if (args.a || args._[0] == 'add') {
     addTask(args.title, args.desc, args.deadline);
     console.log("Завдання додано успішно");
-  } else if (args.e) {
+  } else if (args.e || args._[0] == 'edit') {
     editTask(args.index - 1, args.title, args.desc, args.deadline);
     console.log("Завдання змінено успішно");
-  } else if (args.showburned) {
+  } else if (args.showburned || args._[0] == 'showburned') {
     console.log(getOverdueTasks());
+  } else if (args.d || args._[0] == 'delete') {
+    deleteTask(args.index - 1)
+    console.log(`Завдання №${args.index} успішно видалено`)
   }
 };
 
@@ -161,6 +204,8 @@ function editTask(index, title, description, deadline) {
 }
 
 function markAsDone(index) {
+  console.dir(index)
+  if(isNaN(index)) throw new Error('No index given')
   if (!tasksArr[index]) throw new Error('There is no such task');
   tasksArr[index].isDone = true;
   tasksArr[index].executionDate = new Date();
