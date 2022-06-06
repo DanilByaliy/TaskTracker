@@ -310,3 +310,31 @@ describe('DeleteTask function', () => {
     .toThrow('There is no such task');
   })
 })
+
+describe('GetOverdueTasks function', () => {
+  beforeEach(() => {
+    taskTracker.addTask('title1', null, '2022-05-27 23:59');
+    taskTracker.addTask('title2', 'description2', '2022-05-28 23:59');
+    taskTracker.addTask('title3', null, '2222-05-27 23:59');
+    taskTracker.addTask('title4', 'description4', '2222-05-28 23:59');
+  })
+
+  test('must return the string with overdue tasks', () => {
+    console.log(taskTracker.getTasks());
+    console.log(new Date('2022-05-28'));
+    console.log(taskTracker.getOverdueTasks());
+    expect(taskTracker.getOverdueTasks()).toEqual(
+      "Список протермінованих завдань:\n\n" +
+      "Завдання №1\n" +
+      "Назва: title1\n" +
+      "Дедлайн: 27/5/2022 23:59\n" +
+      "Стан завдання: ✗\n" +
+      "\n" +
+      "Завдання №2\n" +
+      "Назва: title2\n" +
+      "Опис: description2\n" +
+      "Дедлайн: 28/5/2022 23:59\n" +
+      "Стан завдання: ✗\n"
+    );
+  })
+})

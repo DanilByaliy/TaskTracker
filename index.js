@@ -26,7 +26,7 @@ function updateBase(data) {
 }
 
 function checkFormat(deadline) {
-  const regexp = /^\d{4}-\d{2}-\d{2}( \d{2})?(:\d{2})?$/;
+  const regexp = /^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/;
 
   if (!regexp.test(deadline)) {
     throw new Error("Wrong date format");
@@ -51,6 +51,8 @@ const readArgs = (args) => {
   } else if (args.e) {
     editTask(args.index - 1, args.title, args.desc, args.deadline);
     console.log("Завдання змінено успішно");
+  } else if (args.showburned) {
+    console.log(getOverdueTasks());
   }
 };
 
@@ -171,6 +173,22 @@ function deleteTask(index) {
   updateBase(tasksArr);
 }
 
+function getOverdueTasks() {
+  const check = (elem) => {
+    return (elem.deadline && elem.isDone === false && 
+      (new Date(elem.deadline) < new Date()));
+  }
+  
+  const overdueTasks = tasksArr.filter(check);
+  let outputStr;
+
+  if (overdueTasks[0]) {
+    outputStr = "Список протермінованих завдань:\n" + 
+    tasksOutput(overdueTasks);
+  } else outputStr = "Протермінованих завдань немає";
+  return outputStr;
+}
+
 readArgs(argv);
 
 module.exports = {
@@ -182,5 +200,6 @@ module.exports = {
   getTasks, 
   updateBase,
   markAsDone,
-  deleteTask
+  deleteTask,
+  getOverdueTasks
 };
