@@ -319,7 +319,7 @@ describe('GetOverdueTasks function', () => {
     taskTracker.addTask('title4', 'description4', '2222-05-28 23:59');
   })
 
-  test('should return the error and change nothing', () => {
+  test('must return the string with overdue tasks', () => {
     console.log(taskTracker.getTasks());
     console.log(new Date('2022-05-28'));
     console.log(taskTracker.getOverdueTasks());
