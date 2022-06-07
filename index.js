@@ -180,7 +180,7 @@ function addTask(title, description, deadline) {
   if (!deadline || !checkFormat(deadline)) {
     deadline = null;
   } else {
-    task.deadline = new Date(deadline);
+    task.deadline = new Date(deadline).toISOString();
   }
   tasksArr.push(task);
   updateBase(tasksArr);
@@ -190,7 +190,7 @@ function editTask(index, title, description, deadline) {
   if (!tasksArr[index]) throw new Error("There is no such task");
   if (deadline) {
     if (!checkFormat(deadline)) return;
-    tasksArr[index].deadline = new Date(deadline);
+    tasksArr[index].deadline = new Date(deadline).toISOString();
   }
   if (typeof title === "string" && title.length > 0) {
     tasksArr[index].title = title;
@@ -206,7 +206,7 @@ function markAsDone(index) {
   if(isNaN(index)) throw new Error('No index given')
   if (!tasksArr[index]) throw new Error('There is no such task');
   tasksArr[index].isDone = true;
-  tasksArr[index].executionDate = new Date();
+  tasksArr[index].executionDate = new Date().toISOString;
   updateBase(tasksArr);
 }
 

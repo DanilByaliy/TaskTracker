@@ -19,7 +19,7 @@ beforeEach(() => {
 const task1 = {
   title: 'title1',
   description: 'description1',
-  deadline: '2022-06-30T23:59:00',
+  deadline: '2022-06-30T20:59:00.000Z',
   isDone: false,
   executionDate: null
 }
@@ -27,7 +27,7 @@ const task1 = {
 const task2 = {
   title: 'title2',
   description: 'description2',
-  deadline: '2022-06-29T23:59:00',
+  deadline: '2022-06-29T20:59:00.000Z',
   isDone: false,
   executionDate: null
 }
@@ -194,7 +194,7 @@ describe('EditTask function', () => {
 
     expect(editTask1.title).toBe('newTitle');
     expect(editTask1.description).toBe('description1');
-    expect(editTask1.deadline).toBe('2022-06-30T23:59:00');
+    expect(taskTracker.getDateString(editTask1.deadline)).toBe('30/6/2022 23:59\n');
   })
 
   test('should change only the description', () => {
@@ -203,7 +203,7 @@ describe('EditTask function', () => {
   
     expect(editTask1.title).toBe('title1');
     expect(editTask1.description).toBe('newDescription');
-    expect(editTask1.deadline).toBe('2022-06-30T23:59:00');
+    expect(taskTracker.getDateString(editTask1.deadline)).toBe('30/6/2022 23:59\n');
   })
 
   test('should only change the deadline', () => {
@@ -212,7 +212,7 @@ describe('EditTask function', () => {
   
     expect(editTask1.title).toBe('title1');
     expect(editTask1.description).toBe('description1');
-    expect(editTask1.deadline).toBe('2022-02-22T22:22:00');
+    expect(taskTracker.getDateString(editTask1.deadline)).toBe('22/2/2022 22:22\n');
   })
 
   test('must change the title, description and deadline', () => {
@@ -221,7 +221,7 @@ describe('EditTask function', () => {
   
     expect(editTask1.title).toBe('newTitle');
     expect(editTask1.description).toBe('newDescription');
-    expect(editTask1.deadline).toBe('2022-02-22T22:22:00');
+    expect(taskTracker.getDateString(editTask1.deadline)).toBe('22/2/2022 22:22\n');
   })  
 
   test('must change all task parameters for index', () => {
@@ -231,7 +231,7 @@ describe('EditTask function', () => {
   
     expect(editTask2.title).toBe('newTitle');
     expect(editTask2.description).toBe('newDescription');
-    expect(editTask2.deadline).toBe('2022-02-22T22:22:00');
+    expect(taskTracker.getDateString(editTask2.deadline)).toBe('22/2/2022 22:22\n');
   })  
 
   test('should not change anything', () => {
