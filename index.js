@@ -180,7 +180,7 @@ function addTask(title, description, deadline) {
   if (!deadline || !checkFormat(deadline)) {
     deadline = null;
   } else {
-    task.deadline = deadline.replace(" ", "T") + ":00";
+    task.deadline = new Date(deadline);
   }
   tasksArr.push(task);
   updateBase(tasksArr);
@@ -190,7 +190,7 @@ function editTask(index, title, description, deadline) {
   if (!tasksArr[index]) throw new Error("There is no such task");
   if (deadline) {
     if (!checkFormat(deadline)) return;
-    tasksArr[index].deadline = deadline.replace(" ", "T") + ":00";
+    tasksArr[index].deadline = new Date(deadline);
   }
   if (typeof title === "string" && title.length > 0) {
     tasksArr[index].title = title;
